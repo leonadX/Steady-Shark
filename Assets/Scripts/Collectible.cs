@@ -16,8 +16,8 @@ public class Collectible : MonoBehaviour
 
     private void Update()
     {
-        offsetUp = new Vector2(transform.position.x, .2f);
-        offsetDown = new Vector2(transform.position.x, -.2f);
+        offsetUp = new Vector2(transform.position.x, transform.parent.position.y + .2f);
+        offsetDown = new Vector2(transform.position.x, transform.parent.position.y + -.2f);
         if (direction < 0)
         {
             transform.position = Vector2.MoveTowards(transform.position, offsetDown, .001f);

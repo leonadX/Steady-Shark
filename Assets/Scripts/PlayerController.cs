@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController player;
+
     public float force = 100f;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
+
+    private void Awake()
+    {
+        player = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -13,14 +20,46 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    /*public void OnPointerDown(PointerEventData eventData)
+    {
+        if (!GameManager.instance.isGameOver)
+        {
+            Debug.Log("yes");
+            rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        }
+    }*/
+
     // Update is called once per frame
     void Update()
     {
-        if(Input.touchCount > 0)
+        if (!GameManager.instance.isGameOver)
         {
-            if(Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.touchCount > 0)
             {
-                rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+                if (Input.GetTouch(0).phase == TouchPhase.Began && transform.position.y < 4.5f)
+                {
+                    rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+                }
+            }
+
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, transform.position.y - 0.5f, 4.5f));
+
+            if (transform.position.y > 4.5f)
+                rb.velocity = Vector3.zero;
+
+            if (transform.position.y < -4.5f)
+            {
+                GameManager.instance.isGameOver = true;
+
+                if (GameManager.instance.score > GameManager.instance.highscore)
+                {
+                    GameManager.instance.OnHighScore.Raise();
+                    GameManager.instance.highscore = GameManager.instance.score;
+                }
+                else
+                    GameManager.instance.OnGameOver.Raise();
+
+                Time.timeScale = 0.0f;
             }
         }
     }
@@ -33,7 +72,12 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.isGameOver = true;
 
             if (GameManager.instance.score > GameManager.instance.highscore)
+            {
+                GameManager.instance.OnHighScore.Raise();
                 GameManager.instance.highscore = GameManager.instance.score;
+            }
+            else
+                GameManager.instance.OnGameOver.Raise();
 
             Time.timeScale = 0.0f;
             //raise OnGameEnd

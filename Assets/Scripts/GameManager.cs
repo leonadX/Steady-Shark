@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public GameEvent OnPause;
+    public GameEvent OnPlay;
+    public GameEvent OnGameOver;
+    public GameEvent OnHighScore;
 
     public bool isGameOver;
     private bool hasGameStarted;
@@ -54,5 +60,29 @@ public class GameManager : MonoBehaviour
             Vector2 spawnPos = new Vector2(8f, Random.Range(-1.5f, 2.2f));
             Instantiate(obstacles, spawnPos, obstacles.transform.rotation);
         }
+    }
+
+    public void Pause()
+    {
+        PlayerController.player.rb.velocity = Vector3.zero;
+        OnPause.Raise();
+        Time.timeScale = 0.0f;
+    }
+
+    public void Play()
+    {
+        PlayerController.player.rb.velocity = Vector3.zero;
+        OnPlay.Raise();
+        Time.timeScale = 1.0f;
+    }
+
+    public void GoToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
