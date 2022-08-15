@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.scoreText.text = GameManager.instance.score.ToString();
 
             if (GameManager.instance.score > GameManager.instance.highscore)
-                GameManager.instance.highscoreText.text = GameManager.instance.score.ToString();
+                GameManager.instance.highscoreText.text = "Best = " + GameManager.instance.score.ToString();
         }
     }
 }
