@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public GameEvent OnPause;
     public GameEvent OnPlay;
+    public GameEvent OnGameStart;
     public GameEvent OnGameOver;
     public GameEvent OnHighScore;
 
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1.0f;
                 isGameOver = false;
                 hasGameStarted = true;
+                OnGameStart.Raise();
                 StartCoroutine(SpawnObstacles());
             }
         }
